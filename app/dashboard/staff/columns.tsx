@@ -9,12 +9,10 @@ import { format } from 'date-fns';
 export type StaffType = {
     id: string;
     name: string;
-    password: string;
     phone: string;
     role: string;
     isActive: boolean;
     createdAt: Date;
-    updatedAt: Date;
 }
 
 export const columns: ColumnDef<StaffType>[] = [

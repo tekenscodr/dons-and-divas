@@ -6,9 +6,17 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 async function getData(): Promise<StaffType[]> {
-    const staff = prisma.user.findMany()
-    console.log(staff)
-    return staff
+    const staff = await prisma.user.findMany()
+    const formattedStaff = staff.map(user => ({
+        id: user.userID,
+        name: user.username,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isActive: true, // or map from user if available
+        createdAt: user.createdAt,
+    }))
+    return formattedStaff
 }
 
 const page = async () => {
