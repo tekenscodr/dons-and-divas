@@ -9,7 +9,7 @@ type Params = {
 export async function POST(req: Request) {
     try {
         const body: Params = await req.json()
-        const cookieOPN = await cookies().get('SHOP')?.value
+        const cookieOPN = await (await cookies()).get('SHOP')?.value
         if (cookieOPN) {
             const response = await verify(cookieOPN)
             console.log(response)
