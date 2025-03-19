@@ -16,7 +16,6 @@ const navLists = [
 const adminNavLists = [
   ...navLists,
   { name: 'Product & Services', href: '/dashboard/product' },
-  { name: 'Inventory', href: '/dashboard/inventory' },
   { name: 'Users', href: '/dashboard/users' },
 
 ]
