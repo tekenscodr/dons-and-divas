@@ -20,10 +20,10 @@ export async function GET(req: Request) {
                 return order.createdAt.toISOString().split('T')[0] === date.toISOString().split('T')[0];
             });
             const totalSale = dailyOrders.reduce((acc, order) => {
-                return acc + (Number(order.unitPrice) * order.quantity);
+                return acc + (Number(order.unitPrice) * Number(order.quantity));
             }, 0);
             const totalCost = dailyOrders.reduce((acc, order) => {
-                return acc + (Number(order.Product.unitPrice) * order.quantity);
+                return acc + (Number(order.Product.unitPrice) * Number(order.quantity));
             }, 0);
             const profit = totalSale - totalCost;
             dailySales.push({
