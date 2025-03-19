@@ -65,7 +65,7 @@ export async function verify(cookie: string) {
 
 export async function logoutCookie() {
     try {
-        await cookies().delete("SHOP")
+        await (await cookies()).delete("SHOP")
         return;
     } catch (error) {
         throw new Error("Failed to logout")
