@@ -1,0 +1,49 @@
+
+import { hashPassword } from '../lib/auth';
+import prisma from '../lib/prismadb';
+
+export default async function registerStaff(formData: FormData) {
+    try {
+        const password = formData.get('password') as string;
+        const name = formData.get('name') as string;
+        const role = formData.get('role') as string;
+        const phone = formData.get('phone') as string;
+
+
+        // Validation
+        if (!password || !name || !role) {
+            return { error: 'All fields are required' };
+        }
+
+        // Check existing staff
+        const existingStaff = await prisma.staff.findFirst({
+            where: { phone }
+        });
+
+        if (existingStaff) {
+            return { error: 'Staff member already exists' };
+        }
+
+        // Hash password
+        const hashedPassword = await hashPassword(password);
+
+        // Create staff
+        const newStaff = await prisma.staff.create({
+            data: {
+                password: hashedPassword,
+                phone,
+                name,
+                role
+            }
+        });
+
+        // Remove password before returning
+        const { password: _, ...safeStaff } = newStaff;
+
+        return safeStaff;
+
+    } catch (error) {
+        console.error('Registration failed:', error);
+        return { error: 'Registration failed. Please try again.' };
+    }
+}

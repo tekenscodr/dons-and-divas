@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductType {
+  Service
+  Product
+}
+
+model Products {
+  productID       String      @id @default(uuid())
+  productName     String
+  description     String?
+  type            ProductType
+  category        String
+  unitPrice       Decimal
+  sellingPrice    Decimal
+  quantityPerUnit Int
+  inventory       Inventory?
+
+  createdAt    DateTime       @default(now())
+  OrderDetails OrderDetails[]
+}
+
+model Inventory {
+  inventoryID     String   @id @default(uuid())
+  productID       String   @unique
+  quantity        Decimal
+  reorderLevel    Decimal
+  reorderQuantity Decimal
+  createdAt       DateTime @default(now())
+  Product         Products @relation(fields: [productID], references: [productID])
+}
+
+model Orders {
+  orderID        String   @id @default(uuid())
+  orderDate      DateTime @default(now())
+  total          Decimal
+  paymentStatus  String
+  receiptPrinted Boolean  @default(false)
+  attendant      String   @default("0ea83d4b-8668-4d72-8026-f9f58507b45e")
+  customer       String   @default("0ea83d4b-8668-4d72-8026-f9f58507b45e")
+
+  createdAt    DateTime       @default(now())
+  OrderDetails OrderDetails[]
+  Receipts     Receipts[]
+}
+
+model OrderDetails {
+  orderDetailID String   @id @default(uuid())
+  orderID       String
+  productID     String
+  quantity      Decimal
+  unitPrice     Decimal
+  discount      Decimal?
+
+  createdAt DateTime @default(now())
+  Order     Orders   @relation(fields: [orderID], references: [orderID])
+  Product   Products @relation(fields: [productID], references: [productID])
+}
+
+model Receipts {
+  receiptID     String   @id @default(uuid())
+  orderID       String
+  receiptDate   DateTime @default(now())
+  receiptNumber String
+
+  createdAt DateTime @default(now())
+  Order     Orders   @relation(fields: [orderID], references: [orderID])
+}
+
+model Logs {
+  logsID   String @id @default(uuid())
+  action   String
+  location String
+  userID   String
+
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  Attendant
+  Admin
+}
+
+model User {
+  userID   String @id @default(uuid())
+  username String @unique
+  email    String @unique
+  phone    String @unique
+  password String
+  role     Role   @default(Attendant)
+
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  customerID  String  @id @default(uuid())
+  name        String
+  companyName String?
+  phone       String
+  email       String
+  address     String
+
+  createdAt DateTime @default(now())
+}
+
+model Appointment {
+  appointmentID String            @id @default(uuid())
+  customerID    String
+  date          String
+  status        AppointmentStatus @default(Pending)
+  time          String
+  service       String
+  createdAt     DateTime?         @default(now())
+  updatedAt     DateTime?         @updatedAt
+}
+
+enum AppointmentStatus {
+  Pending
+  Completed
+  Cancelled
+}
