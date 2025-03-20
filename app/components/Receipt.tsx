@@ -26,8 +26,8 @@ export const ReceiptContent = (props: any) => {
     return (
         <div className=" mx-auto p-2">
             <div className="text-center mb-4">
-                <h1 className="text-lg font-bold">DONS & DIVAS SALON</h1>
-                <p className="text-gray-600 text-xs">0270778431 / 0544616975</p>
+                <h1 className="text-lg font-bold">DONS & DIVAS GROOMING</h1>
+                <p className="text-gray-600 text-xs">0500953592</p>
             </div>
             <h1 className="text-xs font-bold mb-0">Receipt</h1>
             <div className="receipt-container bg-white p-4 rounded-lg shadow-md">

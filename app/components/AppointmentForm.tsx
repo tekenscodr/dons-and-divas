@@ -176,7 +176,7 @@ const AppointmentForm = () => {
                                 </div>
                             </div>
                             {isLoading ? (
-                                <Button className="w-full">
+                                <Button className="bg-black text-white w-full">
                                     <Loader2 className="mr-2 h-4 animate-spin w-4" />
                                     Please Wait
                                 </Button>
