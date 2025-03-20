@@ -22,7 +22,7 @@ async function fetchFeed(): Promise<Sale[]> {
     const resultsWithReceiptNumber = results.map((order) => ({
         // orderID: order.orderID,
         date: order.orderDate.toDateString(),
-        total: order.total,
+        total: Number(order.total),
         // paymentStatus: order.paymentStatus,
         // receiptPrinted: order.receiptPrinted,
         // createdAt: order.createdAt,
@@ -43,7 +43,6 @@ const Sales = async () => {
                 </div>
                 <div className='flex-1 '>
                     <DataTable columns={columns} data={data} />
-
                 </div>
             </div>
             <div>

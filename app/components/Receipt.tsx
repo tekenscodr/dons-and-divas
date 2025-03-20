@@ -1,14 +1,18 @@
-'use client'
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useRef } from "react";
+import axios from "axios";
+import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useRef, useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
+import prisma from "@/app/prismadb"
 
-const ReceiptContent = (props: any) => {
+export const ReceiptContent = (props: any) => {
     const { receiptDetails, attendant } = props;
+
     if (!receiptDetails) {
         return <div>Loading...</div>;
     }
+
 
 
     const totalPrice = receiptDetails.orderDetails.reduce((acc: number, order: { quantity: any; unitPrice: any; }) => {
@@ -16,16 +20,16 @@ const ReceiptContent = (props: any) => {
     }, 0);
 
     const date = new Date(receiptDetails.receipt.receiptDate).toDateString();
-    console.log(`ODER::: ${receiptDetails}`)
+    console.log(`ODER:::` + attendant.attendant)
     console.log(receiptDetails)
     // const netAmount = 
     return (
-        <div className="max-w-2xl mx-auto p-8">
+        <div className=" mx-auto p-2">
             <div className="text-center mb-4">
                 <h1 className="text-lg font-bold">DONS & DIVAS SALON</h1>
                 <p className="text-gray-600 text-xs">0270778431 / 0544616975</p>
             </div>
-            <h1 className="text-base font-bold mb-2">Receipt</h1>
+            <h1 className="text-xs font-bold mb-0">Receipt</h1>
             <div className="receipt-container bg-white p-4 rounded-lg shadow-md">
                 <p className="text-gray-600 mb-1 text-xs">Receipt Number: {receiptDetails.receipt.receiptNumber}</p>
                 <p className="text-gray-600 mb-1 text-xs">Receipt Date: {date}</p>
@@ -36,7 +40,7 @@ const ReceiptContent = (props: any) => {
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="text-left text-xs"> Name</th>
-                            <th className="text-right text-xs">Quantity</th>
+                            <th className="text-right text-xs">Qty</th>
                             <th className="text-right text-xs">Unit</th>
                             <th className="text-right text-xs">Total</th>
                         </tr>
@@ -82,7 +86,7 @@ interface ReceiptProps {
     attendant: any;
 }
 
-const Receipt: React.FC<ReceiptProps> = ({ receiptDetails = {}, showReceipt, onClose, attendant }) => {
+export const Receipt: React.FC<ReceiptProps> = ({ receiptDetails = {}, showReceipt, onClose, attendant }) => {
     const componentRef = useRef<HTMLDivElement>(null);
     const handlePrint = useReactToPrint({
         documentTitle: "Receipt",
@@ -97,7 +101,7 @@ const Receipt: React.FC<ReceiptProps> = ({ receiptDetails = {}, showReceipt, onC
         <Dialog open={showReceipt}>
             <DialogHeader>
                 <DialogTitle>
-                    <h1>Success!</h1>
+                    Success!
                 </DialogTitle>
 
             </DialogHeader>
@@ -142,5 +146,3 @@ const Receipt: React.FC<ReceiptProps> = ({ receiptDetails = {}, showReceipt, onC
         </Dialog >
     );
 };
-
-export default Receipt;

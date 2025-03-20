@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { useReactToPrint } from 'react-to-print';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import Receipt from './Receipt';
+import { Receipt } from './Receipt';
 import { logs } from '../actions/logs';
 import AddCustomer from './AddCustomer';
 import { Loader2 } from 'lucide-react';
@@ -272,27 +272,35 @@ const SalesForm = () => {
         }) => total + (Number(field.qty) *
           (Number(field.unitPrice) - Number(field.discount))
         ), 0);
-      console.log('Dan Pee  ', data)
-      const response = await axios.post('/api/order/', data);
+      const attend = await axios.get(`/api/user/${data.attendant}`)
+      const username = await attend.data.data.username
+      setAttendant({ attendant: username, customer: data.customerID })
 
-      setAttendant({ attendant: data.attendant, customer: data.customerID })
+      if (attend.data.status === 200) {
+        const response = await axios.post('/api/order/', data);
+        if (response.status === 200 || response.status === 201) { // Assuming a 201 status code indicates a successful order creation
 
-      if (response.status === 200 || response.status === 201) { // Assuming a 201 status code indicates a successful order creation
-        await setOrder(response.data);
-        setShowReceipt(true);
-        setIsLoading(false);
-        toast("Success! ", {
-          description: "Sales made.... Order Booked"
-        })
-        const data = await order;
-        console.log('Order:', data)
-        // await logs('Sales Made', 'inventory', user?.id || '')
-        reset();
 
+          await setOrder(response.data);
+          setShowReceipt(true);
+          setIsLoading(false);
+          toast("Success! ", {
+            description: "Sales made.... Order Booked"
+          })
+          const data = await order;
+          console.log('Order:', data)
+          // await logs('Sales Made', 'inventory', user?.id || '')
+          reset();
+
+        } else {
+          await logs('Sales Failed', 'inventory', user || '')
+          return toast("Aawwnnn! Order Rejected", {
+            description: "Order bounced"
+          })
+        }
       } else {
-        await logs('Sales Failed', 'inventory', user || '')
-        toast("Aawwnnn! Order Rejected", {
-          description: "Order bounced"
+        return toast('Failed', {
+          description: 'Select an attendant'
         })
       }
     } catch (error) {

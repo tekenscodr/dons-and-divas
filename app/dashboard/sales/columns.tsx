@@ -12,13 +12,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ArrowUpDown } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Receipt, ReceiptContent } from "@/app/components/Receipt"
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Sale = {
     invoice: string
     date: string
-    total: any
+    total: number
 }
 
 export const columns: ColumnDef<Sale>[] = [
@@ -54,32 +57,39 @@ export const columns: ColumnDef<Sale>[] = [
         accessorKey: "total",
         header: "Total",
     },
-    // {
-    //     id: "actions",
-    //     cell: ({ row }) => {
-    //         const payment = row.original
+    {
+        id: "actions",
+        header: "Action",
+        cell: ({ row }) => {
+            const sale = row.original
 
-    //         return (
-    //             <DropdownMenu>
-    //                 <DropdownMenuTrigger asChild>
-    //                     <Button variant="ghost" className="h-8 w-8 p-0">
-    //                         <span className="sr-only">Open menu</span>
-    //                         <MoreHorizontal className="h-4 w-4" />
-    //                     </Button>
-    //                 </DropdownMenuTrigger>
-    //                 <DropdownMenuContent align="end">
-    //                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //                     <DropdownMenuItem
-    //                         onClick={() => navigator.clipboard.writeText(payment.id)}
-    //                     >
-    //                         Copy payment ID
-    //                     </DropdownMenuItem>
-    //                     <DropdownMenuSeparator />
-    //                     <DropdownMenuItem>View customer</DropdownMenuItem>
-    //                     <DropdownMenuItem>View payment details</DropdownMenuItem>
-    //                 </DropdownMenuContent>
-    //             </DropdownMenu>
-    //         )
-    //     },
-    // },
+            return (
+                <Dialog>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem>
+                                <DialogTrigger asChild>
+                                    <span className="mouse-pointer"> View Receipt</span>
+                                </DialogTrigger>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>View Receipt</DialogTitle>
+                        </DialogHeader>
+                        <DialogDescription>You can view the products/services a customer bought</DialogDescription>
+                        <ReceiptContent />
+                    </DialogContent>
+                </Dialog>
+            )
+        },
+    },
 ]

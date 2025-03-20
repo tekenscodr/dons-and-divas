@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import prisma from "@/app/prismadb"
-import { UUID as uuid } from 'crypto';
 
 export async function POST(request: Request, context: any) {
     try {
@@ -41,18 +40,25 @@ export async function POST(request: Request, context: any) {
         // Wait for all order details to be created
         await Promise.all(orderDetailsPromises)
 
-        const subtractQtyPromises = data.fields.map((field: { productName: string; qty: any; unitPrice: any }) => {
-
-            return prisma.inventory.update({
-                where: {
-                    productID: field.productName
-                },
-                data: {
-                    quantity: {
-                        decrement: field.qty
-                    }
-                }
+        const subtractQtyPromises = data.fields.map(async (field: { productName: string; qty: any; unitPrice: any }) => {
+            // Fetch the product to check its type
+            const product = await prisma.products.findUnique({
+                where: { productID: field.productName }
             })
+
+            // If the product is not a service, decrement the quantity
+            if (product && product.type !== 'Service') {
+                return prisma.inventory.update({
+                    where: {
+                        productID: field.productName
+                    },
+                    data: {
+                        quantity: {
+                            decrement: field.qty
+                        }
+                    }
+                })
+            }
         })
 
         await Promise.all(subtractQtyPromises)

@@ -1,25 +1,21 @@
 import { NextResponse } from "next/server"
 import prisma from "@/app/prismadb"
+import { useId } from "react";
 
-export async function GET(req: Request, context: any) {
-    const { params } = await context;
-
-    const userId = await params.userId as string;
-    if (!userId) {
-        return NextResponse.json({ error: 'User ID is missing' });
-    }
-
+export async function GET(
+    request: Request,
+    { params }: { params: Promise<{ userId: string }> }
+) {
+    const { userId } = await params;
+    const id = userId;
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: {
-                userID: userId
+                userID: id
             }
-        });
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' });
-        }
-        // console.log(user)
-        return NextResponse.json({ message: 'User found', user });
+        })
+        return NextResponse.json({ data: user, message: "Success" }, { status: 200 })
+
     } catch (error) {
         console.log(error)
         return NextResponse.json({ error: 'Internal Server Error' });
@@ -27,3 +23,4 @@ export async function GET(req: Request, context: any) {
     }
 
 }
+
