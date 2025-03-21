@@ -272,11 +272,11 @@ const SalesForm = () => {
         }) => total + (Number(field.qty) *
           (Number(field.unitPrice) - Number(field.discount))
         ), 0);
+      console.log(data)
       const attend = await axios.get(`/api/user/${data.attendant}`)
       const username = await attend.data.data.username
       setAttendant({ attendant: username, customer: data.customerID })
-
-      if (attend.data.status === 200) {
+      if (attend.data.message == "Success") {
         const response = await axios.post('/api/order/', data);
         if (response.status === 200 || response.status === 201) { // Assuming a 201 status code indicates a successful order creation
 
@@ -293,17 +293,20 @@ const SalesForm = () => {
           reset();
 
         } else {
+          setIsLoading(false);
           await logs('Sales Failed', 'inventory', user || '')
           return toast("Aawwnnn! Order Rejected", {
             description: "Order bounced"
           })
         }
       } else {
+        setIsLoading(false);
         return toast('Failed', {
           description: 'Select an attendant'
         })
       }
     } catch (error) {
+      setIsLoading(false);
       console.log("Failed" + error)
       // await logs('System error', 'inventory', error as any)
       toast("Aawwnnn! Order Rejected", {
