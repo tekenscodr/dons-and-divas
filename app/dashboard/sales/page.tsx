@@ -35,6 +35,7 @@ async function fetchFeed(): Promise<Sale[]> {
 
 const Sales = async () => {
     const data = await fetchFeed()
+    console.log(data)
     return (
         <>
             <div className='flex flex-col p-4 min-h-full w-full overflow-hidden'>

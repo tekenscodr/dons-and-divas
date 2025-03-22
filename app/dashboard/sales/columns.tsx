@@ -15,6 +15,9 @@ import { ArrowUpDown } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Receipt, ReceiptContent } from "@/app/components/Receipt"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
+import { useState } from "react"
+
+
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -64,31 +67,36 @@ export const columns: ColumnDef<Sale>[] = [
             const sale = row.original
 
             return (
-                <Dialog>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                                <DialogTrigger asChild>
-                                    <span className="mouse-pointer"> View Receipt</span>
-                                </DialogTrigger>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>View Receipt</DialogTitle>
-                        </DialogHeader>
-                        <DialogDescription>You can view the products/services a customer bought</DialogDescription>
-                        <ReceiptContent />
-                    </DialogContent>
-                </Dialog>
+                <>
+                    <Dialog>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                    <DialogTrigger asChild>
+                                        <span className="mouse-pointer mb-1">View Receipt</span>
+                                    </DialogTrigger>
+                                </DropdownMenuItem>
+
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>View Receipt</DialogTitle>
+                            </DialogHeader>
+                            <DialogDescription>You can view the products/services a customer bought</DialogDescription>
+                            <ReceiptContent />
+                        </DialogContent>
+                    </Dialog>
+
+
+                </>
             )
         },
     },
