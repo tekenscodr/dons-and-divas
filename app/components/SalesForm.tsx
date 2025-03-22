@@ -279,8 +279,6 @@ const SalesForm = () => {
       if (attend.data.message == "Success") {
         const response = await axios.post('/api/order/', data);
         if (response.status === 200 || response.status === 201) { // Assuming a 201 status code indicates a successful order creation
-
-
           await setOrder(response.data);
           setShowReceipt(true);
           setIsLoading(false);

@@ -6,15 +6,15 @@ export async function GET(
     { params }: { params: Promise<{ productId: string }> }
 ) {
 
-
     const { productId } = await params;
-    const id = await productId
+    console.log(productId)
     try {
-        const product = prisma.products.findFirst({
+        const product = await prisma.products.findFirst({
             where: {
-                productID: id
+                productID: productId
             }
         })
+        console.log(product)
         return NextResponse.json({ data: product, message: "Success" }, { status: 200 })
     } catch (error) {
         return NextResponse.json(error)

@@ -28,6 +28,8 @@ export const ReceiptContent = (props: any) => {
             <div className="text-center mb-4">
                 <h1 className="text-lg font-bold">DONS & DIVAS GROOMING</h1>
                 <p className="text-gray-600 text-xs">0500953592</p>
+                <p className="text-gray-600 text-xs">Dansoman, Moole St. | Exhibition Roundabout</p>
+
             </div>
             <h1 className="text-xs font-bold mb-0">Receipt</h1>
             <div className="receipt-container bg-white p-4 rounded-lg shadow-md">

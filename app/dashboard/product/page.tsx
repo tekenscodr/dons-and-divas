@@ -26,7 +26,6 @@ async function getData(): Promise<ProductType[]> {
                 reorderLevel: inventory ? Number(inventory.reorderLevel) : 0 // Handle null case
             })
         }
-        console.log(productData)
         return productData
     }
 }

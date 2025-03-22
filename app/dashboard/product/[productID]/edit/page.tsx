@@ -1,14 +1,17 @@
 import EditProduct from '@/app/components/EditProduct';
 import React from 'react'
 
-const page = (context: any) => {
-  const { params } = context;
-
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ productID: string }>
+}
+) {
+  const { productID } = await params;
   return (
     <div>
-      <EditProduct productID={params.productID} />
+      <EditProduct productID={productID} />
     </div>
   )
 }
 
-export default page

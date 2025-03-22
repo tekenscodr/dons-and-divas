@@ -21,12 +21,8 @@ async function fetchFeed(): Promise<Sale[]> {
     })
 
     const resultsWithReceiptNumber = results.map((order) => ({
-        // orderID: order.orderID,
         date: order.orderDate.toDateString(),
         total: Number(order.total),
-        // paymentStatus: order.paymentStatus,
-        // receiptPrinted: order.receiptPrinted,
-        // createdAt: order.createdAt,
         invoice: order.Receipts[0].receiptNumber,
     }));
 

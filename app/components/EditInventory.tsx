@@ -8,14 +8,10 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { logs } from '../actions/logs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type secret = {
     productID: string;
-    reorderLevel: number;
-    reorderQuantity: number;
-    sellingPrice: number;
-    unitPrice: number;
 }
 
 type FormFields = {
@@ -26,10 +22,38 @@ type FormFields = {
     unitPrice: number;
 }
 
+interface Fields {
+    inventoryID: string,
+    reorderLevel: number,
+    reorderQuantity: number;
+    sellingPrice: number;
+    unitPrice: number;
+}
+
 const EditInventory = (props: secret) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormFields>();
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+    const [item, setItem] = useState<Fields | null>()
+
+    useEffect(() => {
+        const fetchFeed = async () => {
+            const product = await axios.get(`/api/inventory/${props.productID}/get`)
+            const p = await product.data.data;
+            console.log(p)
+            const fetchedProduct = {
+                inventoryID: p.inventoryID,
+                reorderLevel: p.reorderLevel,
+                reorderQuantity: p.reorderQuantity,
+                sellingPrice: p.sellingPrice,
+                unitPrice: p.unitPrice
+            };
+
+            setItem(fetchedProduct);
+        }
+        fetchFeed();
+
+    }, [props.productID]);
 
     const onSubmit = async (data: any) => {
         try {
@@ -52,16 +76,8 @@ const EditInventory = (props: secret) => {
         }
     };
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                <Button className=" text-black bg-transparent hover:bg-transparent"> Edit Inventory</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-xl">
-                <DialogHeader>
-                    <DialogTitle>Edit Inventory</DialogTitle>
-                    <DialogDescription className='text-black'>
-                    </DialogDescription>
-                </DialogHeader>
+        <>
+            {item ? (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-3">
@@ -84,7 +100,7 @@ const EditInventory = (props: secret) => {
                                 Reorder Level
                             </Label>
                             <Input
-                                defaultValue={props.reorderLevel}
+                                defaultValue={item.reorderLevel}
                                 type='number'
                                 id="reorderLevel"
                                 {...register('reorderLevel', {
@@ -103,7 +119,7 @@ const EditInventory = (props: secret) => {
                                 Reorder Quantity
                             </Label>
                             <Input
-                                defaultValue={props.reorderQuantity}
+                                defaultValue={item.reorderQuantity}
                                 type='number'
                                 id="reorderQty"
                                 {...register('reorderQuantity', {
@@ -122,7 +138,7 @@ const EditInventory = (props: secret) => {
                                 Selling Price
                             </Label>
                             <Input
-                                defaultValue={props.sellingPrice}
+                                defaultValue={item.sellingPrice}
                                 type='number'
                                 id="sellingPrice"
                                 step={0.1}
@@ -141,7 +157,7 @@ const EditInventory = (props: secret) => {
                                 Cost Price
                             </Label>
                             <Input
-                                defaultValue={props.unitPrice}
+                                defaultValue={item.unitPrice}
                                 type='number'
                                 id="unitPrice"
                                 step={0.1}
@@ -162,12 +178,10 @@ const EditInventory = (props: secret) => {
                         </Button>
                     </div>
                 </form>
+            ) : (<p className='flex flex-col items-center justify-center'>Loading</p>)
+            }
 
-                <DialogFooter className="sm:justify-start">
-                    <p>Design by Tekens Technologies</p>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        </>
     )
 }
 

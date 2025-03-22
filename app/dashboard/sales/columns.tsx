@@ -12,10 +12,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ArrowUpDown } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Receipt, ReceiptContent } from "@/app/components/Receipt"
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
-import { useState } from "react"
+
+import Link from "next/link"
 
 
 
@@ -68,32 +66,24 @@ export const columns: ColumnDef<Sale>[] = [
 
             return (
                 <>
-                    <Dialog>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                    <span className="sr-only">Open menu</span>
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem>
-                                    <DialogTrigger asChild>
-                                        <span className="mouse-pointer mb-1">View Receipt</span>
-                                    </DialogTrigger>
-                                </DropdownMenuItem>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem>
+                                <Link href={'/sales/receipt'}>
+                                    <span>View Receipt</span>
+                                </Link>
+                            </DropdownMenuItem>
 
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>View Receipt</DialogTitle>
-                            </DialogHeader>
-                            <DialogDescription>You can view the products/services a customer bought</DialogDescription>
-                            <ReceiptContent />
-                        </DialogContent>
-                    </Dialog>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
 
 
                 </>

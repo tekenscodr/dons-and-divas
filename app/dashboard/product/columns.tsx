@@ -86,11 +86,14 @@ export const columns: ColumnDef<ProductType>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <Link href={`/dashboard/product/${product.id}/edit`}>
-                                span
+                                <span>Edit Product</span>
                             </Link>
                         </DropdownMenuItem>
-                        {/* <DropdownMenuItem><AddInventory productID={product.id}/></DropdownMenuItem> */}
-                    </DropdownMenuContent>
+                        <DropdownMenuItem>
+                            <Link href={`/dashboard/inventory/${product.id}/edit`}>
+                                <span>Edit Inventory</span>
+                            </Link>
+                        </DropdownMenuItem>                    </DropdownMenuContent>
                 </DropdownMenu>
             )
         },

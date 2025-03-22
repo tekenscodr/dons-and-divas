@@ -36,23 +36,26 @@ const EditProduct = (props: secret) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
-    const [item, setItem] = useState<Fields | null>(null)
+    const [item, setItem] = useState<Fields | null>()
 
     useEffect(() => {
         const fetchFeed = async () => {
             const product = await axios.get(`/api/product/${props.productID}/get`)
-            const p = product.data;
+            const p = await product.data.data;
+            console.log(p)
             const fetchedProduct = {
                 productID: p.productID,
                 productName: p.productName,
                 description: p.description,
                 category: p.category,
             };
+
             setItem(fetchedProduct);
-            return fetchedProduct;
         }
-        fetchFeed()
-    }, [props.productID])
+        fetchFeed();
+
+    }, [props.productID]);
+
 
     const onSubmit = async (data: any) => {
         try {
@@ -73,16 +76,8 @@ const EditProduct = (props: secret) => {
         }
     }
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                <Button className=" text-white text-start w-full bg-black"> Edit</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-xl">
-                <DialogHeader>
-                    <DialogTitle>Edit Product</DialogTitle>
-                    <DialogDescription className='text-black'>
-                    </DialogDescription>
-                </DialogHeader>
+        <>
+            {item ? (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-3">
@@ -91,7 +86,7 @@ const EditProduct = (props: secret) => {
                             </Label>
                             <Input
                                 id="productId"
-                                defaultValue={item ? item.productName : ''}
+                                defaultValue={item.productName}
                                 {...register('productName')}
 
                             />
@@ -105,7 +100,7 @@ const EditProduct = (props: secret) => {
                             </Label>
                             <Input
                                 id="description"
-                                defaultValue={item ? item.description : ''}
+                                defaultValue={item.description}
                                 {...register('description')}
 
                             />
@@ -119,7 +114,7 @@ const EditProduct = (props: secret) => {
                             </Label>
                             <Input
                                 id="category"
-                                defaultValue={item ? item.category : ''}
+                                defaultValue={item.category}
                                 {...register('category')}
 
                             />
@@ -133,12 +128,9 @@ const EditProduct = (props: secret) => {
                         </Button>
                     </div>
                 </form>
+            ) : <p>No Data</p>}
 
-                <DialogFooter className="sm:justify-start">
-                    <p>Design by Tekens Technologies</p>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        </>
     )
 }
 
