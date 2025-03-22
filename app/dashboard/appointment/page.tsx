@@ -2,9 +2,11 @@ import React from 'react'
 import { Appointment, columns } from "./columns"
 import { DataTable } from "./data-table"
 import prisma from "@/app/prismadb"
+import { unstable_noStore as noStore } from 'next/cache';
 
 
 async function getData(): Promise<Appointment[]> {
+    noStore();
     const resp = await prisma.appointment.findMany()
     console.log(resp)
     const appointmentData: Appointment[] = []

@@ -4,6 +4,8 @@ import { columns, StaffType } from './columns'
 import prisma from '../../lib/prismadb';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { unstable_noStore as noStore } from 'next/cache';
+
 
 async function getData(): Promise<StaffType[]> {
     const staff = await prisma.user.findMany()
@@ -20,6 +22,8 @@ async function getData(): Promise<StaffType[]> {
 }
 
 const page = async () => {
+    noStore(); // Disable caching for this function
+
     const data = await getData()
 
     return (
