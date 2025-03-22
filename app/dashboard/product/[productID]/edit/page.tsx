@@ -1,3 +1,4 @@
+import EditProduct from '@/app/components/EditProduct';
 import React from 'react'
 
 const page = (context: any) => {
@@ -5,7 +6,7 @@ const page = (context: any) => {
 
   return (
     <div>
-
+      <EditProduct productID={params.productID} />
     </div>
   )
 }

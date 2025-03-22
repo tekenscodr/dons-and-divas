@@ -9,15 +9,20 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { logs } from '../actions/logs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type secret = {
+    productID: string,
+
+}
+
+interface Fields {
     productID: string,
     productName: string,
     description: string,
     category: string,
-}
 
+}
 type FormFields = {
     productID: '',
     productName: '',
@@ -31,6 +36,23 @@ const EditProduct = (props: secret) => {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
+    const [item, setItem] = useState<Fields | null>(null)
+
+    useEffect(() => {
+        const fetchFeed = async () => {
+            const product = await axios.get(`/api/product/${props.productID}/get`)
+            const p = product.data;
+            const fetchedProduct = {
+                productID: p.productID,
+                productName: p.productName,
+                description: p.description,
+                category: p.category,
+            };
+            setItem(fetchedProduct);
+            return fetchedProduct;
+        }
+        fetchFeed()
+    }, [props.productID])
 
     const onSubmit = async (data: any) => {
         try {
@@ -69,7 +91,7 @@ const EditProduct = (props: secret) => {
                             </Label>
                             <Input
                                 id="productId"
-                                defaultValue={props.productName}
+                                defaultValue={item ? item.productName : ''}
                                 {...register('productName')}
 
                             />
@@ -83,7 +105,7 @@ const EditProduct = (props: secret) => {
                             </Label>
                             <Input
                                 id="description"
-                                defaultValue={props.description}
+                                defaultValue={item ? item.description : ''}
                                 {...register('description')}
 
                             />
@@ -97,7 +119,7 @@ const EditProduct = (props: secret) => {
                             </Label>
                             <Input
                                 id="category"
-                                defaultValue={props.category}
+                                defaultValue={item ? item.category : ''}
                                 {...register('category')}
 
                             />

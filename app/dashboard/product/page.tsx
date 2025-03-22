@@ -2,8 +2,10 @@ import axios from "axios"
 import { ProductType, columns } from "./columns"
 import { DataTable } from "./data-table"
 import prisma from "@/app/prismadb"
+import { unstable_noStore as noStore } from 'next/cache';
 
 async function getData(): Promise<ProductType[]> {
+    noStore();
     // Fetch data from your API here.
     const product = await prisma.products.findMany()
     const productData: ProductType[] = []

@@ -15,6 +15,8 @@ import {
 import AddInventory from "@/app/components/AddInventory"
 import AddProduct from "@/app/components/AddProduct"
 import axios from "axios"
+import EditProduct from "@/app/components/EditProduct"
+import Link from "next/link"
 
 export type ProductType = {
     id: string
@@ -82,8 +84,12 @@ export const columns: ColumnDef<ProductType>[] = [
                             Copy payment ID
                         </DropdownMenuItem> */}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><AddProduct /></DropdownMenuItem>
-                        <DropdownMenuItem><AddInventory productID={product.id} reorderLevel={0} reorderQuantity={0} sellingPrice={0} unitPrice={0} /></DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href={`/dashboard/product/${product.id}/edit`}>
+                                span
+                            </Link>
+                        </DropdownMenuItem>
+                        {/* <DropdownMenuItem><AddInventory productID={product.id}/></DropdownMenuItem> */}
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
