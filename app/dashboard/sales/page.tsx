@@ -5,11 +5,13 @@ import { DataTable } from './DataTable'
 import { columns } from "./columns"
 import { Sale } from './columns'
 import prisma from '../../prismadb'
+import { unstable_noStore as noStore } from 'next/cache';
 
 
 
 async function fetchFeed(): Promise<Sale[]> {
     'use server';
+    noStore(); // Disable caching for this function
     const results = await prisma.orders.findMany({
         orderBy: {
             createdAt: 'desc',
