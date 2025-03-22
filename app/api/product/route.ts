@@ -34,9 +34,9 @@ export async function POST(request: Request) {
                 await tx.inventory.create({
                     data: {
                         productID: product.productID,
-                        reorderLevel: 10,
-                        reorderQuantity: 10,
-                        quantity: 10,
+                        reorderLevel: 1,
+                        reorderQuantity: 1,
+                        quantity: 1,
                     }
                 });
             } else {

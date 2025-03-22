@@ -12,13 +12,6 @@ async function getData(): Promise<ProductType[]> {
 
     if (product == null) {
         return [
-            {
-                id: "Jacalloloasdaj328933",
-                productName: "Jacallolos",
-                price: 100,
-                stock: 10,
-                reorderLevel: 5
-            },
         ]
     } else {
         for (const p of product) {
@@ -44,7 +37,7 @@ export default async function Product() {
 
     return (
         <div className="container mx-auto py-10">
-            {data ? <DataTable columns={columns} data={data} /> : <p>No data available</p>}
+            <DataTable columns={columns} data={data} />
         </div>
     )
 }
